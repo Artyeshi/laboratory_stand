@@ -16,9 +16,9 @@ pipeline {
             steps {
                 echo " ============== start building image =================="
                 dir ('docker/toolkit') {
-                	sh 'docker build .'
+                	sh 'docker build -t toolkit:latest .'
                 }
             }
         }
     }
-}
+} 
