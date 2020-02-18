@@ -1,0 +1,11 @@
+---
+    - name: Install apache2 Web Server on VBox machines
+      hosts: VBox
+      become: yes
+    
+      tasks:
+      - name: Install apache2 on virtual machines
+        apt: name=apache2 state=latest update_cache=yes
+    
+      - name: Start apache2 on startup
+        service: name=apache2 state=started enabled=yes    
