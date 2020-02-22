@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+#sudo pip3 install requests beautifulsoup4 lxml
 
 import requests
 from bs4 import BeautifulSoup
@@ -13,7 +14,6 @@ def get_currency_rate(html, symbol):
     tag = soup.find('ins', text=f"{symbol}").find_parent('tr').find_all('td')[-1].text
     result = tag.replace('\xa0', '\n').split('\n')[-2]
     return result
-
 
 def main():
     currency_list = ['Dollar_$', 'Euro_€', 'Gold_Au', 'Platinum_Pt']
