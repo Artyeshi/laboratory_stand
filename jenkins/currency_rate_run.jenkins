@@ -1,0 +1,41 @@
+#!groovy
+// Run docker build
+properties([disableConcurrentBuilds()])
+
+pipeline {
+    agent { 
+        label 'master'
+        }
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
+        timestamps()
+    }
+    stages {
+        stage("clone repo from Github") {
+            steps {
+                git 'https://github.com/Artyeshi/template.git'
+            }
+        }
+        stage("copy actual script.py") {
+            steps {
+                dir ('python/'){
+                    sh 'cp currency_rate.py ../docker/python-env/'
+                }
+            }
+        }
+        stage("create docker image") {
+            steps {
+                dir ('docker/python-env') {
+                	sh 'docker build -t currency_rate:latest .'
+                }
+            }
+        }
+        stage("run docker container with python scripts inside") {
+            steps {
+                dir ('docker/python-env') {
+                	sh 'docker run --name currency_rate -d currency_rate'
+                }
+            }
+        }
+    } 
+}
