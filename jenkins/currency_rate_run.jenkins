@@ -30,22 +30,25 @@ pipeline {
                 }
             }
         }
-        stage("run docker container with python scripts inside") {
+        stage("run docker container and run python scripts inside, copy result") {
             steps {
                 dir ('docker/python-env') {
-                	sh 'docker run --name currency_rate -d currency_rate'
-                }
-            }
-        }
-        stage("run py script and save result") {
-            steps {
-                dir ('docker/python-env') {
-                	sh '''
-                    docker exec -t currency_rate /
-                    python3 currency_rate.py > currency_exchange.txt
+                    sh '''
+                    docker run --name currency_rate -d currency_rate
+                    docker exec -t currency_rate sh -c 'python3 currency_rate.py > curr_exchange.txt'
+                    docker cp currency_rate:/scripts/curr_exchange.txt .
                     '''
+                    archiveArtifacts 'curr_exchange.txt'
                 }
             }
         }
-    } 
+        stage("clean up") {
+            steps {
+                sh '''
+                docker kill currency_rate
+                docker rm currency_rate
+                '''
+            }
+        }
+    }
 }

@@ -12,7 +12,7 @@ def get_html():
 def get_currency_rate(html, symbol):
     soup = BeautifulSoup(html, 'lxml')
     tag = soup.find('ins', text=f"{symbol}").find_parent('tr').find_all('td')[-1].text
-    result = tag.replace('\xa0', '\n').split('\n')[-2]
+    result = tag.replace('↑', '\n').replace('↓', '\n').split('\n')[-2]
     return result
 
 def main():

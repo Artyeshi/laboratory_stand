@@ -3,6 +3,6 @@ RUN apk add --update --no-cache curl wget bash python3 \
     py3-pip python3-dev g++ gcc libxslt-dev && \
     pip3 install requests beautifulsoup4 lxml
 ADD *.py /scripts/
-RUN chmod -R 322 /scripts/
+RUN chmod -R 777 /scripts/
 WORKDIR /scripts/
 CMD tail -f /dev/null
