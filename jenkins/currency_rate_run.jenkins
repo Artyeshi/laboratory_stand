@@ -37,5 +37,15 @@ pipeline {
                 }
             }
         }
+        stage("run py script and save result") {
+            steps {
+                dir ('docker/python-env') {
+                	sh '''
+                    docker exec -t currency_rate /
+                    python3 currency_rate.py > currency_exchange.txt
+                    '''
+                }
+            }
+        }
     } 
 }
